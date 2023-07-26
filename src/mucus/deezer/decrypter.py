@@ -1,6 +1,6 @@
 import hashlib
 
-import Crypto.Cipher.Blowfish
+from Crypto.Cipher import Blowfish
 
 
 class Decrypter:
@@ -10,4 +10,4 @@ class Decrypter:
         self.iv = iv
 
     def decrypt(self, chunk):
-        return Crypto.Cipher.Blowfish.new(self.key, Crypto.Cipher.Blowfish.MODE_CBC, self.iv).decrypt(chunk) # noqa
+        return Blowfish.new(self.key, Blowfish.MODE_CBC, self.iv).decrypt(chunk)

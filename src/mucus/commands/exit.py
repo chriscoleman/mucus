@@ -4,4 +4,4 @@ import mucus.exception
 
 class Command(mucus.command.Command):
     def __call__(self, **kwargs):
-        raise mucus.exception.ExitException
+        raise mucus.exception.Exit

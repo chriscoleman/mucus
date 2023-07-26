@@ -3,7 +3,8 @@ import subprocess
 import threading
 import time
 
-import mucus.song
+from mucus.exception import NoMedia, NoSource
+from mucus.song import Song
 
 
 class Player:
@@ -19,13 +20,13 @@ class Player:
 
         media = next(data)
         if media is None:
-            raise Exception
+            raise NoMedia
 
         source = next(data)
         if source is None:
-            raise Exception
+            raise NoSource
 
-        song = mucus.song.Song(data=song)
+        song = Song(data=song)
 
         self.state.update({'song': song})
 
@@ -41,7 +42,7 @@ class Player:
 
     def loop(self):
         self.events['stop'].clear()
-        self.state.update({'state': 'running'})
+        self.state.update({'state': 'playing'})
         while not self.events['stop'].is_set():
             try:
                 song = self.queue.get(timeout=1)

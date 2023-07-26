@@ -1,18 +1,20 @@
-import httpx
 import redis
 
 from mucus.deezer.exception import AuthException
 
 
 def discover(key):
-    with redis.Redis(decode_responses=True) as db:
-        value = db.get(f'mucus:deezer:{key}')
-        if value is not None:
-            return value
+    try:
+        with redis.Redis(decode_responses=True) as db:
+            value = db.get(f'mucus:deezer:{key}')
+            if value is not None:
+                return value
+    except redis.exceptions.RedisError:
+        pass
     raise AuthException(key)
 
 
-class Auth(httpx.Auth):
+class Auth:
     def __init__(self, sid=None, arl=None):
         if sid is None:
             sid = discover('sid')
@@ -20,8 +22,3 @@ class Auth(httpx.Auth):
             arl = discover('arl')
         self.sid = sid
         self.arl = arl
-
-    def auth_flow(self, request):
-        request.cookies['sid'] = self.sid
-        request.cookies['arl'] = self.arl
-        yield request

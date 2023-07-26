@@ -1,5 +1,6 @@
 import re
 
+from mucus.exception import NoSuchCommand
 from mucus.lazy import import_module as lazy_import
 
 
@@ -40,7 +41,3 @@ class Runner:
 
     def __call__(self):
         return self.loader.cmd(**self.context)
-
-
-class NoSuchCommand(Exception):
-    pass
