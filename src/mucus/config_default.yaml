@@ -1,0 +1,11 @@
+---
+aliases:
+  - [n, next]
+  - [p, pause]
+  - [q, queue]
+  - ['?', state]
+  - [s, start]
+  - ['!', stop]
+  - [c, clear]
+download:
+  directory: .
