@@ -21,12 +21,19 @@ class Stream:
             'track_tokens': [self.song['TRACK_TOKEN']]
         }).json()['data'][0]['media'][0]
         yield media
+        source = media['sources'][0]
+        yield source
         decrypter = Decrypter(self.song['SNG_ID'])
-        for source in media['sources']:
-            with httpx.stream('GET', source['url']) as r:
-                yield source
-                for i, chunk in enumerate(r.iter_bytes(chunk_size=2048)):
-                    if i % 3 == 0 and len(chunk) == 2048:
-                        chunk = decrypter.decrypt(chunk)
-                    yield chunk
-                return
+        url = source['url']
+        pos = 0
+        while True:
+            try:
+                with httpx.stream('GET', url, headers={'range': f'bytes={pos}-'}, timeout=1.0) as r: # noqa
+                    for chunk in r.iter_bytes(chunk_size=2048):
+                        if (pos // 2048) % 3 == 0 and len(chunk) == 2048:
+                            chunk = decrypter.decrypt(chunk)
+                        yield chunk
+                        pos += len(chunk)
+                    return
+            except httpx.HTTPError:
+                continue

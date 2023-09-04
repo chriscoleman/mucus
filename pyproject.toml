@@ -9,7 +9,7 @@ readme = "README.md"
 license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: MIT License"]
 dynamic = ["version", "description"]
-dependencies = ["appdirs", "click", "confuse", "redis", "rich", "myass", "pycryptodome"] 
+dependencies = ["appdirs", "click", "confuse", "redis", "rich", "myass", "pycryptodome", "yaspin"] 
 
 [project.scripts]
 mucus = "mucus.cli:main"

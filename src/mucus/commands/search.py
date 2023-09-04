@@ -8,7 +8,7 @@ import mucus.history
 class Command(mucus.command.Command):
     def __call__(self, client, command, player, **kwargs):
         query = command['line']
-        search = mucus.deezer.page.Search(client=client, query=query, nb=10)
+        search = mucus.deezer.page.Search(client=client, query=query, nb=20)
         choices = search.track['data'].copy()
         for i, track in enumerate(choices):
             click.echo(' '.join([

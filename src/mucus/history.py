@@ -17,7 +17,7 @@ class History:
                 readline.clear_history()
                 for item in db.lrange(self.key, -self.n, -1):
                     readline.add_history(item)
-                db.expire(self.key, 86400)
+                db.expire(self.key, 2592000)
         except redis.exceptions.RedisError:
             pass
 
@@ -26,7 +26,7 @@ class History:
             with redis.Redis(decode_responses=True) as db:
                 for i in range(readline.get_current_history_length()):
                     db.rpush(self.key, readline.get_history_item(i+1))
-                db.expire(self.key, 86400)
+                db.expire(self.key, 2592000)
                 readline.clear_history()
                 for item in self.backup:
                     readline.add_history(item)

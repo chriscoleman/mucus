@@ -8,7 +8,7 @@ import mucus.deezer.client
 import mucus.deezer.exception
 import mucus.exception
 import mucus.history
-import mucus.play
+import mucus.play.player
 
 
 @click.command()
@@ -22,7 +22,7 @@ def command(aliases):
             client = mucus.deezer.client.Client()
         except mucus.deezer.exception.AuthException as e:
             raise click.ClickException(e)
-        player = mucus.play.Player(client)
+        player = mucus.play.player.Player(client)
         player.start()
 
         def inputs():
