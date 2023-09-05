@@ -11,9 +11,24 @@ import mucus.history
 import mucus.play.player
 
 
-@click.command()
-@click.option('--alias', '-a', 'aliases', type=(str, str), multiple=True)
-def command(aliases):
+@click.command(help='music cli thing', epilog='\b\n' + click.style('''
+ ███▄ ▄███▓ █    ██  ▄████▄   █    ██   ██████
+▓██▒▀█▀ ██▒ ██  ▓██▒▒██▀ ▀█   ██  ▓██▒▒██    ▒
+▓██    ▓██░▓██  ▒██░▒▓█    ▄ ▓██  ▒██░░ ▓██▄
+▒██    ▒██ ▓▓█  ░██░▒▓▓▄ ▄██▒▓▓█  ░██░  ▒   ██▒
+▒██▒   ░██▒▒▒█████▓ ▒ ▓███▀ ░▒▒█████▓ ▒██████▒▒
+░ ▒░   ░  ░░▒▓▒ ▒ ▒ ░ ░▒ ▒  ░░▒▓▒ ▒ ▒ ▒ ▒▓▒ ▒ ░
+░  ░      ░░░▒░ ░ ░   ░  ▒   ░░▒░ ░ ░ ░ ░▒  ░ ░
+░      ░    ░░░ ░ ░ ░         ░░░ ░ ░ ░  ░  ░
+       ░      ░     ░ ░         ░           ░
+                    ░
+'''.strip(), fg='green'))
+@click.option('--alias', '-a', 'aliases', type=(str, str),
+              metavar='<name value>', multiple=True)
+@click.option('--default', '-d', default='search', show_default=True,
+              metavar='<command>', help='default command')
+def command(aliases, default):
+
     aliases = dict(aliases)
     config = mucus.config.Config()
 
@@ -39,7 +54,10 @@ def command(aliases):
             try:
                 loader = mucus.command.Loader(line=line, aliases=aliases)
             except mucus.command.NoSuchCommand:
-                loader = mucus.command.Loader(name='search')
+                try:
+                    loader = mucus.command.Loader(name=default)
+                except mucus.command.NoSuchCommand as e:
+                    raise click.ClickException(e)
 
             runner = mucus.command.Runner(
                 loader,

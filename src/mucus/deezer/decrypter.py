@@ -1,13 +1,15 @@
 import hashlib
 
-from Crypto.Cipher import Blowfish
+from Crypto.Cipher import Blowfish as bf
 
 
 class Decrypter:
-    def __init__(self, song_id, secret=b'g4el58wc0zvf9na1', iv=bytes(range(8))): # noqa
+    secret = b'g4el58wc0zvf9na1'
+    iv = bytes(range(8))
+
+    def __init__(self, song_id):
         h = hashlib.md5(song_id.encode()).hexdigest().encode()
-        self.key = bytes([h[i] ^ h[i+16] ^ secret[i] for i in range(16)])
-        self.iv = iv
+        self.key = bytes([h[i] ^ h[i+16] ^ self.secret[i] for i in range(16)])
 
     def decrypt(self, chunk):
-        return Blowfish.new(self.key, Blowfish.MODE_CBC, self.iv).decrypt(chunk)
+        return bf.new(self.key, bf.MODE_CBC, self.iv).decrypt(chunk)

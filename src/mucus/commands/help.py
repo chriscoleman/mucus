@@ -4,7 +4,6 @@ import click
 
 import mucus.command
 import mucus.commands
-import mucus.exception
 
 
 class Command(mucus.command.Command):
