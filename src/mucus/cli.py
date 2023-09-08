@@ -24,7 +24,7 @@ import mucus.play.player
                     ░
 '''.strip(), fg='green'))
 @click.option('--alias', '-a', 'aliases', type=(str, str),
-              metavar='<name value>', multiple=True)
+              metavar='<name> <command>', multiple=True)
 @click.option('--default', '-d', default='search', show_default=True,
               metavar='<command>', help='default command')
 def command(aliases, default):
