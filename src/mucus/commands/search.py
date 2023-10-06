@@ -57,7 +57,7 @@ class Command(mucus.command.Command):
                 break
             for i, track in enumerate(choices):
                 click.echo(' '.join([
-                    click.style(f'{i:03}', fg='red'),
+                    click.style(f'{i:02}', fg='red'),
                     click.style(track['ART_NAME'], fg='green'),
                     click.style(track['SNG_TITLE'], fg='blue')
                 ]))

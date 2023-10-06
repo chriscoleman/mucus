@@ -20,7 +20,7 @@ class Command(mucus.command.Command):
             random.shuffle(items)
         for i, item in enumerate(items):
             click.echo(' '.join([
-                click.style(f'{i:03}', fg='red'),
+                click.style(f'{i:02}', fg='red'),
                 click.style(item['ART_NAME'], fg='green'),
                 click.style(item['SNG_TITLE'], fg='blue')
             ]))

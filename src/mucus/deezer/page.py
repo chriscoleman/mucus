@@ -30,41 +30,6 @@ class Track(Page):
     params = {'sng_id': None}
 
 
-class Search(Page):
-    method = 'deezer.PageSearch'
-    params = {
-        'query': None,
-        'start': 0,
-        'nb': 10,
-        'suggest': True,
-        'artist_suggest': True,
-        'top_tracks': True
-    }
-
-    def __iter__(self):
-        def generator():
-            for track in self.data['TRACKS']:
-                yield track
-        return generator()
-
-
-class SearchMusic(Page):
-    method = 'search.music'
-    params = {
-        'query': None,
-        'start': 0,
-        'nb': 40,
-        'filter': 'all',
-        'output': 'TRACK'
-    }
-
-    def __iter__(self):
-        def generator():
-            for track in self.data:
-                yield track
-        return generator()
-
-
 class Playlist(Page):
     method = 'deezer.PagePlaylist'
     params = {
@@ -78,7 +43,36 @@ class Playlist(Page):
     }
 
     def __iter__(self):
-        def generator():
-            for song in self.data['SONGS']['data']:
-                yield song
-        return generator()
+        for song in self.data['SONGS']['data']:
+            yield song
+
+
+class Search(Page):
+    method = 'deezer.PageSearch'
+    params = {
+        'query': None,
+        'start': 0,
+        'nb': 10,
+        'suggest': True,
+        'artist_suggest': True,
+        'top_tracks': True
+    }
+
+    def __iter__(self):
+        for track in self.data['TRACKS']:
+            yield track
+
+
+class SearchMusic(Page):
+    method = 'search.music'
+    params = {
+        'query': None,
+        'start': 0,
+        'nb': 40,
+        'filter': 'all',
+        'output': 'TRACK'
+    }
+
+    def __iter__(self):
+        for track in self.data:
+            yield track
