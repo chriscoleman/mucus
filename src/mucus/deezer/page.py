@@ -3,26 +3,31 @@ class Page:
     params = None
 
     def __init__(self, client, **kwargs):
-        self._data = client.post(self.method, json={**self.params, **kwargs})
+        self.data = client.post(self.method, json={**self.params, **kwargs})
 
     def __repr__(self):
         return f'<{self.__class__.__name__}>'
-
-    def __getattr__(self, name):
-        try:
-            return self._data[name.upper()]
-        except KeyError:
-            raise AttributeError(name)
 
 
 class Artist(Page):
     method = 'deezer.PageArtist'
     params = {'art_id': None, 'lang': 'en', 'tab': 0}
 
+    def __iter__(self):
+        def generator():
+            for song in self.data['TOP']['data']:
+                yield song
+        return generator()
+
 
 class Album(Page):
     method = 'deezer.PageAlbum'
     params = {'alb_id': None, 'lang': 'en', 'tab': 0, 'header': True}
+
+
+class Track(Page):
+    method = 'deezer.PageTrack'
+    params = {'sng_id': None}
 
 
 class Search(Page):
@@ -40,4 +45,40 @@ class Search(Page):
         def generator():
             for track in self.data['TRACKS']:
                 yield track
+        return generator()
+
+
+class SearchMusic(Page):
+    method = 'search.music'
+    params = {
+        'query': None,
+        'start': 0,
+        'nb': 40,
+        'filter': 'all',
+        'output': 'TRACK'
+    }
+
+    def __iter__(self):
+        def generator():
+            for track in self.data:
+                yield track
+        return generator()
+
+
+class Playlist(Page):
+    method = 'deezer.PagePlaylist'
+    params = {
+        'nb': 2000,
+        'start': 0,
+        'playlist_id': None,
+        'lang': 'en',
+        'tab': 0,
+        'tags': True,
+        'header': True
+    }
+
+    def __iter__(self):
+        def generator():
+            for song in self.data['SONGS']['data']:
+                yield song
         return generator()

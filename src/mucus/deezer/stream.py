@@ -13,13 +13,25 @@ class Stream:
         self.license_token = license_token
 
     def stream(self, format='FLAC'):
-        media = httpx.post('https://media.deezer.com/v1/get_url', json={
+        formats = ['FLAC', 'MP3_320', 'MP3_128', 'MP3_64', 'MP3_MISC']
+        if format is not None:
+            formats = [format, *[f for f in formats if f != format]]
+        formats = [{'cipher': 'BF_CBC_STRIPE', 'format': format}
+                   for format in formats]
+        r = httpx.post('https://media.deezer.com/v1/get_url', json={
             'license_token': self.license_token,
-            'media': [{'type': 'FULL',
-                       'formats': [{'cipher': 'BF_CBC_STRIPE',
-                                    'format': format}]}],
+            'media': [{'type': 'FULL', 'formats': formats}],
             'track_tokens': [self.song['TRACK_TOKEN']]
-        }).json()['data'][0]['media'][0]
+        }).json()
+        try:
+            errors = r['data'][0]['errors']
+        except KeyError:
+            pass
+        else:
+            print(errors[0])
+            yield None
+            return
+        media = r['data'][0]['media'][0]
         yield media
         source = media['sources'][0]
         yield source

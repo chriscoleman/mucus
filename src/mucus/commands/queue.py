@@ -1,3 +1,4 @@
+import random
 import queue
 
 import click
@@ -15,6 +16,8 @@ class Command(mucus.command.Command):
                 break
         if '!' in command['line']:
             return
+        if '*' in command['line']:
+            random.shuffle(items)
         for i, item in enumerate(items):
             click.echo(' '.join([
                 click.style(f'{i:03}', fg='red'),

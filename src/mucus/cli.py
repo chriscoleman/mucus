@@ -11,7 +11,7 @@ import mucus.history
 import mucus.play.player
 
 
-@click.command(help='music cli thing', epilog='\b\n' + click.style('''
+@click.command(help='\b\n' + click.style('''
  ███▄ ▄███▓ █    ██  ▄████▄   █    ██   ██████
 ▓██▒▀█▀ ██▒ ██  ▓██▒▒██▀ ▀█   ██  ▓██▒▒██    ▒
 ▓██    ▓██░▓██  ▒██░▒▓█    ▄ ▓██  ▒██░░ ▓██▄

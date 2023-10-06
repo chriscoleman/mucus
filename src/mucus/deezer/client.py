@@ -21,10 +21,7 @@ class Client(httpx.Client):
 
     @property
     def license_token(self):
-        try:
-            return self.user['USER']['OPTIONS']['license_token']
-        except KeyError:
-            return None
+        return self.user['USER']['OPTIONS']['license_token']
 
     def request(self, method, url, **kwargs):
         kwargs['params'] = {
